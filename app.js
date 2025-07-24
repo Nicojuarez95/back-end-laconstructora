@@ -14,7 +14,7 @@ app.set('view engine', 'ejs');
 app.use(express.json());
 app.use(cors())
 
-app.use('/', indexRouter);
+app.use('/api', indexRouter);
 
 export default app
 
