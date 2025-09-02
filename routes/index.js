@@ -5,18 +5,22 @@ import proveedoresRoutes from './proveedores.js';
 import ingresosRoutes from './ingresos.js';
 import gastosRoutes from './gastos.js';
 import chequesRoutes from './cheques.js';
-import balancesRoutes from './balances.js';
+import balanceRoutes from './balances.js';
+import authenticateToken from '../middlewares/authenticate.js';
+import authorize from '../middlewares/authorize.js';
 
-let router = express.Router();
+const router = express.Router();
 
-// Rutas de autenticación
+// Rutas sin protección (para login)
 router.use('/auth', authRoutes);
-// Rutas de la aplicación (protegidas)
-router.use('/obras', obrasRoutes);
-router.use('/proveedores', proveedoresRoutes);
-router.use('/ingresos', ingresosRoutes);
-router.use('/gastos', gastosRoutes);
-router.use('/cheques', chequesRoutes);
-router.use('/balances', balancesRoutes);
+
+// Rutas protegidas
+// Todas las rutas debajo de esta línea requerirán autenticación y autorización de 'admin'
+router.use('/obras', authenticateToken, authorize(['admin']), obrasRoutes);
+router.use('/proveedores', authenticateToken, authorize(['admin']), proveedoresRoutes);
+router.use('/ingresos', authenticateToken, authorize(['admin']), ingresosRoutes);
+router.use('/gastos', authenticateToken, authorize(['admin']), gastosRoutes);
+router.use('/cheques', authenticateToken, authorize(['admin']), chequesRoutes);
+router.use('/balance', authenticateToken, authorize(['admin']), balanceRoutes);
 
 export default router;

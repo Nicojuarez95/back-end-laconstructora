@@ -1,9 +1,10 @@
 import Ingreso from '../models/ingreso.js';
+import Cheque from '../models/cheque.js';
 
 const ingresoController = {
     getIngresos: async (req, res) => {
         try {
-            const ingresos = await Ingreso.find().populate('obra');
+            const ingresos = await Ingreso.find().populate('obra').populate('cheque');
             res.status(200).json(ingresos);
         } catch (error) {
             res.status(500).json({ message: error.message });
@@ -11,9 +12,32 @@ const ingresoController = {
     },
 
     createIngreso: async (req, res) => {
-        const { date, obra, amount, description } = req.body;
+        const { date, obra, amount, description, chequeId } = req.body;
         try {
-            const newIngreso = new Ingreso({ date, obra, amount, description });
+            const newIngreso = new Ingreso({ date, obra, amount, description, cheque: chequeId });
+            await newIngreso.save();
+            res.status(201).json(newIngreso);
+        } catch (error) {
+            res.status(400).json({ message: error.message });
+        }
+    },
+
+    createIngresoFromCheque: async (req, res) => {
+        const { chequeId, date, description } = req.body;
+        try {
+            const cheque = await Cheque.findById(chequeId);
+            if (!cheque) {
+                return res.status(404).json({ message: 'Cheque no encontrado' });
+            }
+
+            const newIngreso = new Ingreso({
+                date,
+                obra: cheque.obra,
+                amount: cheque.amount,
+                description: description || `Ingreso de cheque # ${cheque.number}`,
+                cheque: cheque._id,
+            });
+
             await newIngreso.save();
             res.status(201).json(newIngreso);
         } catch (error) {
@@ -24,7 +48,7 @@ const ingresoController = {
     getIngresoById: async (req, res) => {
         try {
             const { id } = req.params;
-            const ingreso = await Ingreso.findById(id).populate('obra');
+            const ingreso = await Ingreso.findById(id).populate('obra').populate('cheque');
             if (!ingreso) {
                 return res.status(404).json({ message: 'Ingreso no encontrado' });
             }

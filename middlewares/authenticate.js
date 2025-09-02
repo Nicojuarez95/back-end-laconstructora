@@ -6,13 +6,13 @@ const authenticateToken = (req, res, next) => {
 
   if (token == null) {
     console.log('No token provided');
-    return res.sendStatus(401); // No hay token
+    return res.status(401).json({ message: 'No se ha proporcionado un token.' });
   }
 
-  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
+  jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
     if (err) {
       console.log('Error verifying token:', err.message);
-      return res.sendStatus(403); // Token inválido o expirado
+      return res.status(403).json({ message: 'Token inválido o expirado.' });
     }
 
     console.log('Token is valid:', user);

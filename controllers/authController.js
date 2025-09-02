@@ -36,6 +36,11 @@ const authController = {
             if (!isMatch) {
                 return res.status(400).json({ message: 'Credenciales inválidas.' });
             }
+            // Aseguramos que el usuario tenga un rol antes de firmar el token
+            if (!user.rol) {
+                user.rol = 'admin';
+                await user.save();
+            }
             const token = jwt.sign({ id: user._id, rol: user.rol }, process.env.JWT_SECRET, { expiresIn: '1h' });
             res.status(200).json({ message: 'Login exitoso.', token });
         } catch (error) {

@@ -12,8 +12,9 @@ const obraController = {
 
   createObra: async (req, res) => {
     try {
-      const { name, direccion, tipo } = req.body;
-      const newObra = new Obra({ name, direccion, tipo });
+      // Usar los mismos nombres de campos que el modelo
+      const { nombre, ubicacion, descripcion } = req.body;
+      const newObra = new Obra({ nombre, ubicacion, descripcion });
       await newObra.save();
       return res.status(201).json(newObra);
     } catch (error) {
