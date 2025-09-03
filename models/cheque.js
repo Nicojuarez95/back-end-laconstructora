@@ -5,16 +5,16 @@ const chequeSchema = new mongoose.Schema({
     banco: { type: String, required: true },
     monto: { type: Number, required: true },
     fechaEmision: { type: Date, default: Date.now },
-    fechaVencimiento: { type: Date, required: true },
+    fechaCobro: { type: Date, required: true },
     estado: {
         type: String,
         enum: ['en cartera', 'depositado', 'cobrado', 'rechazado', 'endosado'],
         default: 'en cartera'
     },
-    // Referencia a la obra de la que se recibió el cheque
-    obra: { type: mongoose.Schema.Types.ObjectId, ref: 'Obra' },
-    // Referencia al proveedor al que se le pagó con el cheque
+    // Relación con el proveedor que emitió el cheque
     proveedor: { type: mongoose.Schema.Types.ObjectId, ref: 'Proveedor' },
+    // Relación con la obra por la que se recibió el cheque
+    obra: { type: mongoose.Schema.Types.ObjectId, ref: 'Obra' },
     descripcion: { type: String }
 }, {
     timestamps: true

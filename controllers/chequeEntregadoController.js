@@ -1,20 +1,20 @@
-import Cheque from '../models/cheque.js';
+import ChequeEntregado from '../models/chequeEntregado.js';
 
-const chequeController = {
-    // Crea un nuevo cheque
+const chequeEntregadoController = {
+    // Crea un nuevo cheque entregado
     create: async (req, res) => {
         try {
-            const newCheque = new Cheque(req.body);
+            const newCheque = new ChequeEntregado(req.body);
             await newCheque.save();
             res.status(201).json(newCheque);
         } catch (error) {
-            res.status(500).json({ message: 'Error al crear el cheque.', error });
+            res.status(500).json({ message: 'Error al crear el cheque entregado.', error });
         }
     },
-    // Obtiene todos los cheques, opcionalmente por estado o proveedor
+    // Obtiene todos los cheques entregados, opcionalmente por estado o proveedor
     getAll: async (req, res) => {
         try {
-            const { estado, proveedorId, obraId } = req.query;
+            const { estado, proveedorId } = req.query;
             let query = {};
             if (estado) {
                 query.estado = estado;
@@ -22,19 +22,16 @@ const chequeController = {
             if (proveedorId) {
                 query.proveedor = proveedorId;
             }
-            if (obraId) {
-                query.obra = obraId;
-            }
-            const cheques = await Cheque.find(query).populate('proveedor').populate('obra');
+            const cheques = await ChequeEntregado.find(query).populate('proveedor');
             res.status(200).json(cheques);
         } catch (error) {
-            res.status(500).json({ message: 'Error al obtener los cheques.', error });
+            res.status(500).json({ message: 'Error al obtener los cheques entregados.', error });
         }
     },
-    // Obtiene un cheque por su ID
+    // Obtiene un cheque entregado por su ID
     getById: async (req, res) => {
         try {
-            const cheque = await Cheque.findById(req.params.id).populate('proveedor').populate('obra');
+            const cheque = await ChequeEntregado.findById(req.params.id).populate('proveedor');
             if (!cheque) {
                 return res.status(404).json({ message: 'Cheque no encontrado.' });
             }
@@ -43,10 +40,10 @@ const chequeController = {
             res.status(500).json({ message: 'Error al obtener el cheque.', error });
         }
     },
-    // Actualiza un cheque por su ID
+    // Actualiza un cheque entregado por su ID
     update: async (req, res) => {
         try {
-            const updatedCheque = await Cheque.findByIdAndUpdate(req.params.id, req.body, { new: true });
+            const updatedCheque = await ChequeEntregado.findByIdAndUpdate(req.params.id, req.body, { new: true });
             if (!updatedCheque) {
                 return res.status(404).json({ message: 'Cheque no encontrado.' });
             }
@@ -55,10 +52,10 @@ const chequeController = {
             res.status(500).json({ message: 'Error al actualizar el cheque.', error });
         }
     },
-    // Elimina un cheque por su ID
+    // Elimina un cheque entregado por su ID
     delete: async (req, res) => {
         try {
-            const deletedCheque = await Cheque.findByIdAndDelete(req.params.id);
+            const deletedCheque = await ChequeEntregado.findByIdAndDelete(req.params.id);
             if (!deletedCheque) {
                 return res.status(404).json({ message: 'Cheque no encontrado.' });
             }
@@ -69,4 +66,4 @@ const chequeController = {
     }
 };
 
-export default chequeController;
+export default chequeEntregadoController;

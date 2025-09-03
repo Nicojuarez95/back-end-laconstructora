@@ -4,10 +4,12 @@ const gastoSchema = new mongoose.Schema({
     monto: { type: Number, required: true },
     fecha: { type: Date, default: Date.now },
     descripcion: { type: String },
-    obra: { type: mongoose.Schema.Types.ObjectId, ref: 'Obra', required: true }
+    obra: { type: mongoose.Schema.Types.ObjectId, ref: 'Obra' },
+    proveedor: { type: mongoose.Schema.Types.ObjectId, ref: 'Proveedor' }
 }, {
     timestamps: true
 });
 
 const Gasto = mongoose.model('Gasto', gastoSchema);
 export default Gasto;
+

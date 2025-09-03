@@ -1,14 +1,15 @@
-import express from 'express';
+import { Router } from 'express';
 import chequeController from '../controllers/chequeController.js';
 import authenticateToken from '../middlewares/authenticate.js';
 import authorize from '../middlewares/authorize.js';
 
-let router = express.Router();
+const router = Router();
 
-router.get('/', authenticateToken, authorize(['admin']), chequeController.getCheques);
-router.post('/', authenticateToken, authorize(['admin']), chequeController.createCheque);
-router.get('/:id', authenticateToken, authorize(['admin']), chequeController.getChequeById);
-router.put('/:id', authenticateToken, authorize(['admin']), chequeController.updateCheque);
-router.delete('/:id', authenticateToken, authorize(['admin']), chequeController.deleteCheque);
+// Rutas para cheques con autenticación y autorización de 'admin'
+router.post('/', authenticateToken, authorize(['admin']), chequeController.create);
+router.get('/', authenticateToken, authorize(['admin']), chequeController.getAll);
+router.get('/:id', authenticateToken, authorize(['admin']), chequeController.getById);
+router.put('/:id', authenticateToken, authorize(['admin']), chequeController.update);
+router.delete('/:id', authenticateToken, authorize(['admin']), chequeController.delete);
 
 export default router;
