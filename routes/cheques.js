@@ -8,9 +8,12 @@ const router = Router();
 // Rutas para cheques con autenticación y autorización de 'admin'
 router.post('/', authenticateToken, authorize(['admin']), chequeController.create);
 router.get('/', authenticateToken, authorize(['admin']), chequeController.getAll);
+
+// La ruta específica '/proximos-vencimientos' debe ir antes de la ruta dinámica '/:id'
+router.get('/proximos-vencimientos', authenticateToken, authorize(['admin']), chequeController.getProximosVencimientos);
 router.get('/:id', authenticateToken, authorize(['admin']), chequeController.getById);
+
 router.put('/:id', authenticateToken, authorize(['admin']), chequeController.update);
 router.delete('/:id', authenticateToken, authorize(['admin']), chequeController.delete);
-router.get('/proximos-vencimientos', authenticateToken, authorize(['admin']), chequeController.getProximosVencimientos);
 
 export default router;
