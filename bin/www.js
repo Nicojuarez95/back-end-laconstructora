@@ -6,7 +6,7 @@
 
 import app from "../app.js"
 import debug from "debug"
-const logger = debug("back-app-pedidosbar:server")
+const logger = debug("back-app-LC:server")
 import http from 'http'
 
 
