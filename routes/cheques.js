@@ -11,5 +11,6 @@ router.get('/', authenticateToken, authorize(['admin']), chequeController.getAll
 router.get('/:id', authenticateToken, authorize(['admin']), chequeController.getById);
 router.put('/:id', authenticateToken, authorize(['admin']), chequeController.update);
 router.delete('/:id', authenticateToken, authorize(['admin']), chequeController.delete);
+router.get('/proximos-vencimientos', authenticateToken, authorize(['admin']), chequeController.getProximosVencimientos);
 
 export default router;

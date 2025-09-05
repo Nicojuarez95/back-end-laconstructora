@@ -43,6 +43,23 @@ const chequeController = {
             res.status(500).json({ message: 'Error al obtener el cheque.', error });
         }
     },
+    // Obtiene los cheques próximos a vencer
+    getProximosVencimientos: async (req, res) => {
+        try {
+            const hoy = new Date();
+            const fechaLimite = new Date();
+            fechaLimite.setDate(hoy.getDate() + 30); // Próximos 30 días
+
+            const cheques = await Cheque.find({
+                fechaCobro: { $gte: hoy, $lte: fechaLimite },
+                estado: { $in: ['en cartera', 'depositado', 'al portador'] } // Puedes ajustar los estados según tu lógica
+            }).populate('proveedor').populate('obra');
+            
+            res.status(200).json(cheques);
+        } catch (error) {
+            res.status(500).json({ message: 'Error al cargar los próximos vencimientos.', error });
+        }
+    },
     // Actualiza un cheque por su ID
     update: async (req, res) => {
         try {
